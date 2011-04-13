@@ -29,7 +29,7 @@ public class SwitcherApplication extends Application {
 
 	@Override
 	public void onTerminate() {
-		//stopService(new Intent(this, SwitcherService.class) );
+		stopService(new Intent(this, SwitcherService.class) );
 		super.onTerminate();
 	}
 	
