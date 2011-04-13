@@ -2,7 +2,7 @@
 <resources>
     <string name="hello">Hello World!</string>
     <string name="app_name">WSwitcher</string>
-    <string name="notification_message">test message</string>
-    <string name="notification_title">some test title</string>
-    <string name="ticker_text">some ticker text</string>
+    <string name="notification_message">updating status...</string>
+    <string name="notification_title">...</string>
+    <string name="ticker_text">updating status...</string>
 </resources>
