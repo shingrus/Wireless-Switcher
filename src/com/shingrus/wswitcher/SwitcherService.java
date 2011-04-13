@@ -4,8 +4,11 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.IBinder;
 
 public class SwitcherService extends Service {
@@ -30,18 +33,25 @@ public class SwitcherService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		notification = new Notification(R.drawable.icon,  getText(R.string.ticker_text),
-		        System.currentTimeMillis());
-		notification.flags |= notification.FLAG_NO_CLEAR;
 
+		String SSIDName = ""; 
+		
+		WifiManager wmf = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+		if (wmf != null){
+			WifiInfo info = wmf.getConnectionInfo();
+			if (info != null) {
+				SSIDName = info.getSSID();
+			}
+		}
+		notification = new Notification(R.drawable.icon,  SSIDName,
+		        System.currentTimeMillis());
+		notification.flags |= Notification.FLAG_NO_CLEAR;
+
+		
 		Intent notificationIntent = new Intent(this, SwitcherSettingsActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(this, getText(R.string.notification_title),
-		        getText(R.string.notification_message), pendingIntent);
+		notification.setLatestEventInfo(this, SSIDName,"", pendingIntent);
 		startForeground(100500, notification);
-		
-		
-		WifiConfiguration wificfg = new WifiConfiguration();
 		
 		super.onStart(intent, startId);
 	}

@@ -13,12 +13,19 @@
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:name="SwitcherApplication">
 		<service android:name=".SwitcherService" android:enabled="true" />
+		
 		<activity android:name=".SwitcherSettingsActivity" android:launchMode="standard">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-
+		
+		<receiver android:name=".ConfigChangesReciever" android:enabled="true" android:exported="false">
+			<intent-filter>
+				<action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE"/>
+			</intent-filter>
+		</receiver>
+	
     </application>
 </manifest>
