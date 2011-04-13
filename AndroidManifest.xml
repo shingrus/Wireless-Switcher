@@ -21,11 +21,11 @@
 			</intent-filter>
 		</activity>
 		
-		<receiver android:name=".ConfigChangesReciever" android:enabled="true" android:exported="false">
+		<!--  receiver android:name=".ConfigChangesReciever" android:enabled="true" android:exported="false">
 			<intent-filter>
 				<action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE"/>
 			</intent-filter>
-		</receiver>
+		</receiver -->
 	
     </application>
 </manifest>
