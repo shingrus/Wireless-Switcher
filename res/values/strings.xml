@@ -5,4 +5,5 @@
     <string name="notification_message">updating status...</string>
     <string name="notification_title">...</string>
     <string name="ticker_text">updating status...</string>
+    <item name="notyfyId" type="integer">100500</item>
 </resources>
