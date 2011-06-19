@@ -35,10 +35,11 @@ public class SwitcherService extends Service {
             if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
             		NetworkInfo ni = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
             		if (ni.isConnected() == true && ni.getType() == ConnectivityManager.TYPE_WIFI) {
-            			String bssid = intent.getStringExtra(WifiManager.EXTRA_BSSID);
+            			//String bssid = intent.getStringExtra(WifiManager.EXTRA_BSSID);
             			WifiInfo info = wm.getConnectionInfo();
             			String ssid = info.getSSID();
-            			System.err.println("BSSID:" + bssid + "; SSID:" + ssid);
+            			notification.setLatestEventInfo(context, "Connected", "SSID:" + ssid, contentIntent);
+            			notificationManager.notify(R.integer.notyfyId, notification);
             			
             		}
             		else {
@@ -48,29 +49,16 @@ public class SwitcherService extends Service {
             			
             		}
             }
-//            else if (action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION) == true && intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)) {
-//				System.err.println("Wifi disconnected");
-//            } 
-            	
-//            else if (action.equals(WifiManager.C))
-/*            else
-			if (action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)) {
-					intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false);
-                       } 
-*/            /*else if (action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
-            		                handleWifiStateChanged(intent.getIntExtra
-            		(WifiManager.EXTRA_WIFI_STATE,
-            		                        WifiManager.WIFI_STATE_UNKNOWN));
-           }*/
-			
-			
-//			if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED,true)) {
-//				System.err.println("Wifi connected");
-//			} else if (!intent.getBooleanExtra(
-//					WifiManager.EXTRA_SUPPLICANT_CONNECTED, true)) {
-//				System.err.println("Wifi disconnected from network");
-//			}
-
+            else if (action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
+            	int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE ,
+            		    WifiManager.WIFI_STATE_UNKNOWN);
+            	switch(extraWifiState){
+            	  case WifiManager.WIFI_STATE_DISABLED:
+          			notification.setLatestEventInfo(context, "disconnected", "disconnected", contentIntent);
+        			notificationManager.notify(R.integer.notyfyId, notification);
+        			break;
+            	  }
+            }
 		}
 
 		@Override
@@ -142,7 +130,7 @@ public class SwitcherService extends Service {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 		//ilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
-		//filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+		filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 
 		registerReceiver(recv, filter);
 		
