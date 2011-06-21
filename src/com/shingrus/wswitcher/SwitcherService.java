@@ -1,8 +1,6 @@
 package com.shingrus.wswitcher;
 
 
-import java.nio.channels.NotYetConnectedException;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -21,7 +18,7 @@ import android.os.IBinder;
 
 public class SwitcherService extends Service {
 
-	class ConfigChangesReciever extends BroadcastReceiver {
+	public class ConfigChangesReciever extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -31,8 +28,7 @@ public class SwitcherService extends Service {
 			
 			final String action = intent.getAction();
 			System.err.println("Action:" + action);
-			
-            if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+			if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
             		NetworkInfo ni = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
             		if (ni.isConnected() == true && ni.getType() == ConnectivityManager.TYPE_WIFI) {
             			//String bssid = intent.getStringExtra(WifiManager.EXTRA_BSSID);
@@ -58,6 +54,10 @@ public class SwitcherService extends Service {
         			notificationManager.notify(R.integer.notyfyId, notification);
         			break;
             	  }
+            }
+            else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+            	Intent i = new Intent(context, SwitcherService.class);
+            	startService(i);
             }
 		}
 
