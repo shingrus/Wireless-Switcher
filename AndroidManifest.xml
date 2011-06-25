@@ -14,7 +14,7 @@
 	android:name="SwitcherApplication">
 	<service android:name=".SwitcherService" android:enabled="true" />
 
-	<receiver android:name="SwitcherService.BroadcastReceiver">
+	<receiver android:name=".SwitcherService.ConfigChangesReciever">
 		<intent-filter>
 			<action android:name="android.intent.action.BOOT_COMPLETED" />
 			<category android:name="android.intent.category.HOME" />
