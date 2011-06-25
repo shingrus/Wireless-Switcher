@@ -16,6 +16,12 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 
+/**
+ * 
+ * @author shingrus
+ * @version 1.0
+ * 
+ */
 public class SwitcherService extends Service {
 
 	public class ConfigChangesReciever extends BroadcastReceiver {
