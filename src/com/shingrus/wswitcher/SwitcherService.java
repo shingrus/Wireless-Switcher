@@ -15,6 +15,7 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
+import android.widget.RemoteViews;
 
 /**
  * 
@@ -76,12 +77,14 @@ public class SwitcherService extends Service {
 	}
 	
 	Notification notification;
+	RemoteViews notificationView;
 	ConfigChangesReciever recv;
 	private NotificationManager notificationManager;
 	
 	
 	public SwitcherService() {
 		super();
+		notificationView = new RemoteViews(getPackageName(), R.layout.notification);
 		recv = new ConfigChangesReciever();
 	}
 
@@ -108,8 +111,8 @@ public class SwitcherService extends Service {
 			if (wmf != null){
 				WifiInfo info = wmf.getConnectionInfo();
 				if (info != null) {
-					SupplicantState ss =  info.getSupplicantState();
-					NetworkInfo.DetailedState ns = WifiInfo.getDetailedStateOf(ss);
+					//SupplicantState ss =  info.getSupplicantState();
+					//NetworkInfo.DetailedState ns = WifiInfo.getDetailedStateOf(ss);
 					
 					SSIDName = info.getSSID();
 				}
@@ -129,6 +132,12 @@ public class SwitcherService extends Service {
 		Intent notificationIntent = new Intent(this, SwitcherSettingsActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		notification.setLatestEventInfo(this, SSIDName,"", pendingIntent);
+
+		
+//		notificationView.setImageViewResource(R.id.image, R.drawable.notification_image);
+//		notificationView.setTextViewText(R.id.text, "Hello, this message is in a custom expanded view");
+//		notification.contentView = contentView;
+		
 		startForeground(R.integer.notyfyId, notification);
 		
 		//register reciver

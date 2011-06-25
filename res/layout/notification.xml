@@ -2,12 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
               android:padding="3dp"
-              >
-    <TextView android:id="@+id/text"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:textColor="#000"
-              />
+              android:layout_height="wrap_content" android:baselineAligned="true">
+    <TextView  android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:text="TextView" android:layout_width="wrap_content" android:gravity="left" android:id="@+id/textNotification"></TextView>
+    <Button android:text="Button" android:gravity="right" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/wifiButton"></Button>   
 </LinearLayout>
