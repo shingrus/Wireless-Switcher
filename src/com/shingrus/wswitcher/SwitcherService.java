@@ -84,7 +84,7 @@ public class SwitcherService extends Service {
 	
 	public SwitcherService() {
 		super();
-		notificationView = new RemoteViews(getPackageName(), R.layout.notification);
+		//notificationView = new RemoteViews(getPackageName(), R.layout.notification);
 		recv = new ConfigChangesReciever();
 	}
 
