@@ -34,14 +34,14 @@ public class SwitcherService extends Service {
 			final PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 			
 			final String action = intent.getAction();
-			System.err.println("Action:" + action);
+//			System.err.println("Action:" + action);
 			if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
             		NetworkInfo ni = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
             		if (ni.isConnected() == true && ni.getType() == ConnectivityManager.TYPE_WIFI) {
             			//String bssid = intent.getStringExtra(WifiManager.EXTRA_BSSID);
             			WifiInfo info = wm.getConnectionInfo();
             			String ssid = info.getSSID();
-            			notification.setLatestEventInfo(context, "Connected", "SSID:" + ssid, contentIntent);
+            			notification.setLatestEventInfo(context, "Connected", getSSIDString(ssid), contentIntent);
             			notificationManager.notify(R.integer.notyfyId, notification);
             			
             		}
@@ -62,10 +62,7 @@ public class SwitcherService extends Service {
         			break;
             	  }
             }
-            else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-            	Intent i = new Intent(context, SwitcherService.class);
-            	startService(i);
-            }
+//            else 
 		}
 
 		@Override
@@ -84,8 +81,6 @@ public class SwitcherService extends Service {
 	
 	public SwitcherService() {
 		super();
-		//notificationView = new RemoteViews(getPackageName(), R.layout.notification);
-		recv = new ConfigChangesReciever();
 	}
 
 	@Override
@@ -94,15 +89,18 @@ public class SwitcherService extends Service {
 	}
 
 	
+	private final String getSSIDString (String SSID) {
+		return new String("SSID: " + SSID);
+	}
 
 	
 
 	@Override
 	public void onStart(Intent intent, int startId) {
 
-		String SSIDName = "";
+		String SSIDName = "disconnected";
 		
-		
+		boolean isConnected = false;
 		ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
 		NetworkInfo wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -111,6 +109,7 @@ public class SwitcherService extends Service {
 			if (wmf != null){
 				WifiInfo info = wmf.getConnectionInfo();
 				if (info != null) {
+					isConnected = true;
 					//SupplicantState ss =  info.getSupplicantState();
 					//NetworkInfo.DetailedState ns = WifiInfo.getDetailedStateOf(ss);
 					
@@ -119,28 +118,21 @@ public class SwitcherService extends Service {
 			}
 
 		}
-		
-		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		
-		notification = new Notification(R.drawable.icon,  SSIDName,
-		        System.currentTimeMillis());
-		notification.flags |= Notification.FLAG_NO_CLEAR;
 
-		
-		
-		
 		Intent notificationIntent = new Intent(this, SwitcherSettingsActivity.class);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(this, SSIDName,"", pendingIntent);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
+		notification.setLatestEventInfo(this, isConnected ? "Connected" : "Disconnected", getSSIDString(SSIDName), pendingIntent);
 
 		
 //		notificationView.setImageViewResource(R.id.image, R.drawable.notification_image);
 //		notificationView.setTextViewText(R.id.text, "Hello, this message is in a custom expanded view");
 //		notification.contentView = contentView;
 		
-		startForeground(R.integer.notyfyId, notification);
+		//startForeground(R.integer.notyfyId, notification);
 		
-		//register reciver
+		notificationManager.notify(R.integer.notyfyId, notification);
+		
+		//register receiver
 		
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -150,5 +142,20 @@ public class SwitcherService extends Service {
 		registerReceiver(recv, filter);
 		
 		super.onStart(intent, startId);
+	}
+
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+
+		//notificationView = new RemoteViews(getPackageName(), R.layout.notification);
+		recv = new ConfigChangesReciever();
+		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		notification = new Notification(R.drawable.icon,  "",
+		        System.currentTimeMillis());
+		notification.flags |= Notification.FLAG_NO_CLEAR;
+		
+		super.onCreate();
 	}
 }
