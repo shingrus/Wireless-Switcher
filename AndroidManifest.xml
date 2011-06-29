@@ -16,7 +16,7 @@
 	android:name="SwitcherApplication">
 	<service android:name=".SwitcherService" android:enabled="true" />
 
-	<receiver android:name="com.shingrus.WSwitcherBootReciever">
+	<receiver android:name="com.shingrus.wswitcher.WSwitcherBootReciever">
 		<intent-filter>
 			<action android:name="android.intent.action.BOOT_COMPLETED" />
 			<category android:name="android.intent.category.HOME" />
